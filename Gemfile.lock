@@ -127,7 +127,7 @@ GEM
     globalid (0.4.0)
       activesupport (>= 4.2.0)
     gruff (0.3.7)
-    haml (5.0.3)
+    haml (5.0.4)
       temple (>= 0.8.0)
       tilt
     haml-rails (1.0.0)
