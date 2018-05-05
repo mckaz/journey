@@ -6,6 +6,12 @@ GIT
     prototype-rails (4.0.0)
       rails (~> 4.0)
 
+PATH
+  remote: ../comp-types/rdl
+  specs:
+    rdl (2.1.0)
+      parser (~> 2.3, >= 2.3.1.4)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -55,6 +61,7 @@ GEM
     archive-zip (0.7.0)
       io-like (~> 0.3.0)
     arel (6.0.4)
+    ast (2.4.0)
     bcrypt (3.1.10)
     breach-mitigation-rails (0.2.2)
       activesupport
@@ -185,6 +192,8 @@ GEM
       mini_portile2 (~> 2.3.0)
     orm_adapter (0.5.0)
     paginator (1.2.0)
+    parser (2.5.1.0)
+      ast (~> 2.4.0)
     pry (0.10.1)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
@@ -322,6 +331,7 @@ DEPENDENCIES
   rack-ssl
   rails (= 4.2.9)
   rails-dom-testing
+  rdl!
   rmagick
   rmagick4j
   rollbar
@@ -336,8 +346,5 @@ DEPENDENCIES
   will_paginate
   xebec
 
-RUBY VERSION
-   ruby 2.1.2p95
-
 BUNDLED WITH
-   1.16.0
+   1.16.1

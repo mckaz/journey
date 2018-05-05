@@ -56,10 +56,11 @@ class ResponsesCsvExporter
       ds = answers_table.order(Sequel.desc(Sequel.qualify(:responses, :id)), Sequel.qualify(:pages, :position), Sequel.qualify(:questions, :position)).
         select(Sequel.qualify(:responses, :id), Sequel.qualify(:responses, :submitted_at), Sequel.qualify(:responses, :notes), Sequel.qualify(:answers, :question_id), Sequel.qualify(:answers, :value), Sequel.qualify(:question_options, :output_value))
 
-      column_ids = columns.map(&:id)
+      column_ids = RDL.type_cast(columns.map(&:id), "Array<Integer>", force: true) ## MKCHANGE
       current_column_index = 0
       current_response_id = 0
       current_row = nil
+
       ds.each do |db_row|
         if db_row[:id] != current_response_id
           yield current_row if current_row
@@ -83,6 +84,7 @@ class ResponsesCsvExporter
         current_row << (db_row[:output_value] || db_row[:value] || "")
         current_column_index += 1
       end
+
       yield current_row if current_row
     end
   end
@@ -92,12 +94,13 @@ class ResponsesCsvExporter
     @db ||= RailsSequel.connect
   end
 
+  ## MKCHANGE: type cast
   def answers_table
     db[:answers].
       inner_join(:responses, :id => :response_id).
       inner_join(:questions, :id => Sequel.qualify(:answers, :question_id)).
       inner_join(:pages, :id => Sequel.qualify(:questions, :page_id)).
       left_join(:question_options, :question_id => Sequel.qualify(:answers, :question_id), :option => Sequel.qualify(:answers, :value)).
-      where(Sequel.qualify(:responses, :questionnaire_id) => questionnaire.id)
+      where(RDL.type_cast(Sequel.qualify(:responses, :questionnaire_id), ":responses__questionnaire_id", force: true) => questionnaire.id)
   end
 end

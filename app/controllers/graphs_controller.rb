@@ -85,7 +85,7 @@ class GraphsController < ApplicationController
           value = "No answer"
         end
       end
-      
+
       counts[question_id] ||= {}
       counts[question_id][value] ||= 0
       counts[question_id][value] += 1
