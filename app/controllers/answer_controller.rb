@@ -35,8 +35,8 @@ class AnswerController < ApplicationController
   end
 
   def prompt
-    @all_responses = []
-    @responses = []
+    @all_responses = RDL.type_cast([], "Array<Response>", force: true) ##MKCHANGE
+    @responses = RDL.type_cast([], "Array<Response>", force: true) ##MKCHANGE
     if person_signed_in?
       @all_responses = @questionnaire.responses.where(person_id: current_person.id).to_a
       if @questionnaire.allow_finish_later
@@ -195,8 +195,8 @@ class AnswerController < ApplicationController
         @resp.save
 
         @questionnaire.email_notifications.notify_on_response_submit.includes(:person).each do |notification|
-          next unless notification.try(:person).try(:email).present?
-          NotificationMailer.response_submitted(@resp, notification.person).deliver_later
+          next unless RDL.type_cast(notification.try(:person).try(:email).present?, "%bool", force: true) ##MKCHANGE
+          NotificationMailer.response_submitted(@resp, RDL.type_cast(notification.person, "Person", force: true)).deliver_later
         end
 
         redirect_to :action => "save_session", :id => @resp.questionnaire.id, :current_page => 1

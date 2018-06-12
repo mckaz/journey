@@ -39,7 +39,7 @@ class QuestionnairePermission < ActiveRecord::Base
         
         invitee_attrs = invitee.attributes
         self.person = Person.create(:email => email, :username => email, :firstname => invitee_attrs["firstname"], 
-          :lastname => invitee_attrs["lastname"], :gender => invitee_attrs["gender"], :birthdate => invitee_attrs["birthdate"])
+          :lastname => invitee_attrs["lastname"], :gender => invitee_attrs["gender"], :birthdate => RDL.type_cast(invitee_attrs["birthdate"], "DateTime", force: true))
       rescue
         logger.error "Error during invite: #{$!}"
         errors.add(:base, "Error inviting new user #{email}: $!")

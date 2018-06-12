@@ -7,7 +7,7 @@ class GraphsController < ApplicationController
   
   def line
     authorize! :view_answers, @questionnaire
-    
+
     @questions = Question.where(id: params[:question_ids]).all
     @counts = aggregate_questions(params[:question_ids])
     @min = @questions.collect { |q| q.min }.min
@@ -16,12 +16,13 @@ class GraphsController < ApplicationController
     @graph = Gruff::Line.new(@geom)
   
     i = 0
-    @labels = {}
-    @series = {}
+    ## MKCHANGE: a few below.
+    @labels = RDL.type_cast({}, "Hash<Integer, String>", force: true)
+    @series = RDL.type_cast({}, "Hash<Question, Array<Integer>>", force: true)
     @min.upto(@max) do |answer|
       @labels[i] = answer.to_s
       @questions.each do |question|
-        @series[question] ||= []
+        @series[question] ||= RDL.type_cast([], "Array<Integer>", force: true)
         @series[question] << (@counts[question.id][answer.to_s] || 0)
       end
       i += 1
@@ -74,7 +75,7 @@ class GraphsController < ApplicationController
     ds = ds.where(:pages__questionnaire_id => @questionnaire.id)
     ds = ds.select(:questions__id, :answers__value, :question_options__output_value)
     
-    counts = {}
+    counts = RDL.type_cast({}, "Hash<Integer, Hash<String, Integer>>", force: true) ## MKCHANGE
     ds.each do |db_row|
       question_id = db_row[:id]
       value = (db_row[:output_value] || db_row[:value])
@@ -86,7 +87,7 @@ class GraphsController < ApplicationController
         end
       end
 
-      counts[question_id] ||= {}
+      counts[question_id] ||= RDL.type_cast({}, "Hash<String, Integer>", force: true) ## MKCHANGE
       counts[question_id][value] ||= 0
       counts[question_id][value] += 1
     end

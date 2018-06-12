@@ -426,8 +426,11 @@ class Table
     qual_table_schema = get_schema(RDL::Globals.seq_db_schema[qual_table].elts)
     raise RDL::Typecheck::StaticTypeError, "No column #{qual_column} in table #{qual_table}." if qual_table_schema[qual_column].nil?
     if type
-      type = type.params[0] if type.is_a?(RDL::Type::GenericType) && (type.base == RDL::Globals.types[:array]) ## only happens if meth is where, don't need to check
-      raise RDL::Typecheck::StaticTypeError, "Incompatible column types. Given #{type} but expected #{qual_table_schema[qual_column]} for column #{column_name}." unless RDL::Type::Type.leq(type, qual_table_schema[qual_column])
+      types = (if type.is_a?(RDL::Type::UnionType) then type.types else [type] end)
+      types.each { |t|
+        t = t.params[0] if t.is_a?(RDL::Type::GenericType) && (t.base == RDL::Globals.types[:array]) ## only happens if meth is where, don't need to check
+        raise RDL::Typecheck::StaticTypeError, "Incompatible column types. Given #{t} but expected #{qual_table_schema[qual_column]} for column #{column_name}." unless RDL::Type::Type.leq(t, qual_table_schema[qual_column])
+      }
     end
     return qual_table_schema[qual_column]
   end

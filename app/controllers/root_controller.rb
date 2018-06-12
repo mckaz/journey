@@ -14,8 +14,8 @@ class RootController < ApplicationController
     
     @page_title = "Dashboard"
     
-    @my_questionnaires = QuestionnairePermission.for_person(current_person).allows_anything.
-      order("questionnaire_id DESC").includes(:questionnaire).to_a.map(&:questionnaire).compact
+    @my_questionnaires = RDL.type_cast(QuestionnairePermission.for_person(current_person).allows_anything.
+      order("questionnaire_id DESC").includes(:questionnaire).to_a.map(&:questionnaire), "Array<Questionnaire>", force: true).compact ## MKCHANGE. Note that everything in the type cast did type check until the call to map.
     
     @responses = Response.where(:person_id => current_person.id).includes(:questionnaire).order(:created_at => :desc).limit(8)
   end
