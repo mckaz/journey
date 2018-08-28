@@ -7,7 +7,7 @@ class AnswerController < ApplicationController
   public
 
   def resume
-    @resp = Response.find(params[:id])
+    @resp = Response.find(RDL.type_cast(params[:id], "Integer"))
     if @resp.person != current_person
       raise "That response does not belong to you.  Either log in as a different person, or start a new response."
     else
@@ -27,7 +27,7 @@ class AnswerController < ApplicationController
 
       qid = @resp.questionnaire.id
       session["response_#{qid}"] = @resp.id
-      redirect_to :action => 'index', :id => qid, :page => @resp[:saved_page]
+      redirect_to :action => 'index', :id => qid, :page => RDL.type_cast(@resp[:saved_page], "Integer")
     end
   rescue
     flash[:error_messages] = [$!.to_s]
@@ -111,10 +111,10 @@ class AnswerController < ApplicationController
   end
 
   def preview
-    @questionnaire = Questionnaire.includes(:questionnaire_permissions, :pages).find(params[:id])
+    @questionnaire = RDL.type_cast(Questionnaire.includes(:questionnaire_permissions, :pages).find(RDL.type_cast(params[:id], "Integer")), "Questionnaire")
 
     if @questionnaire.pages.size > 0
-      @page = @questionnaire.pages[(params[:page] || 1).to_i - 1]
+      @page = @questionnaire.pages[(RDL.type_cast(params[:page], "Integer") || 1).to_i - 1]
 
       @resp = @questionnaire.responses.build
       @previewing = true
@@ -125,7 +125,7 @@ class AnswerController < ApplicationController
   end
 
   def questionnaire_closed
-    @questionnaire = Questionnaire.find(params[:id])
+    @questionnaire = Questionnaire.find(RDL.type_cast(params[:id], "Integer"))
   end
 
   def save_session
@@ -146,7 +146,7 @@ class AnswerController < ApplicationController
 
   def save_answers
     @resp = Response.find(session["response_#{params[:id]}"])
-    @page = @resp.questionnaire.pages[params[:current_page].to_i - 1]
+    @page = @resp.questionnaire.pages[RDL.type_cast(params[:current_page], "Integer").to_i - 1]
 
     @page.questions.each do |question|
       if question.kind_of? Questions::Field
@@ -155,10 +155,10 @@ class AnswerController < ApplicationController
           if ans.nil?
             ans = Answer.new :question_id => question.id, :response_id => @resp.id
           end
-          if question.kind_of?(Questions::CheckBoxField) && params[:question][question.id.to_s].to_s == '0'
+          if question.kind_of?(Questions::CheckBoxField) && RDL.type_cast(params[:question], "Hash<String, String>")[question.id.to_s].to_s == '0'
             ans.value = nil
           else
-            ans.value = params[:question][question.id.to_s]
+            ans.value = RDL.type_cast(params[:question], "Hash<String, String>")[question.id.to_s]
           end
 
           ans.save
@@ -172,7 +172,7 @@ class AnswerController < ApplicationController
     end
 
     if params[:commit] =~ /later/i
-      redirect_to :action => "save_session", :id => @resp.questionnaire.id, :current_page => params[:current_page]
+      redirect_to :action => "save_session", :id => @resp.questionnaire.id, :current_page => RDL.type_cast(params[:current_page], "Integer")
       return
     else
       offset = if params[:commit] =~ /[<>]/
@@ -185,7 +185,7 @@ class AnswerController < ApplicationController
         if errors.length > 0
           @error_messages = errors
           @resp.reload
-          render :action => "index", :id => @resp.questionnaire.id, :page => params[:current_page]
+          render :action => "index", :id => @resp.questionnaire.id, :page => RDL.type_cast(params[:current_page], "Integer")
           return
         end
       end
@@ -195,13 +195,13 @@ class AnswerController < ApplicationController
         @resp.save
 
         @questionnaire.email_notifications.notify_on_response_submit.includes(:person).each do |notification|
-          next unless RDL.type_cast(notification.try(:person).try(:email).present?, "%bool", force: true) ##MKCHANGE
-          NotificationMailer.response_submitted(@resp, RDL.type_cast(notification.person, "Person", force: true)).deliver_later
+          next unless RDL.type_cast(RDL.type_cast(notification, "EmailNotification").try(:person).try(:email).present?, "%bool", force: true) ##MKCHANGE
+          NotificationMailer.response_submitted(@resp, RDL.type_cast(notification, "EmailNotification").person).deliver_later
         end
 
         redirect_to :action => "save_session", :id => @resp.questionnaire.id, :current_page => 1
       else
-        new_page = params[:current_page].to_i + offset
+        new_page = RDL.type_cast(params[:current_page], "Integer").to_i + offset
         @resp.saved_page = new_page
         @resp.save
         redirect_to :action => "index", :id => @resp.questionnaire.id, :page => new_page
@@ -216,7 +216,7 @@ class AnswerController < ApplicationController
   end
 
   def get_questionnaire
-    @questionnaire = Questionnaire.find params[:id]
+    @questionnaire = Questionnaire.find RDL.type_cast(params[:id], "Integer")
   end
 
   def check_required_login

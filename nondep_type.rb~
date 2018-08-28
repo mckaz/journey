@@ -1,0 +1,4 @@
+RDL.nowrap ActiveRecord::Associations::ClassMethods
+RDL::Globals.info.info['ActiveRecord::Associations::ClassMethods'] = nil
+
+Rails.application.eager_load!

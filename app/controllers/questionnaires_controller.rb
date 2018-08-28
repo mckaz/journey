@@ -8,25 +8,25 @@ class QuestionnairesController < ApplicationController
   def index
     p = person_signed_in? ? current_person : nil
     per_page = 12
-    conditions = []
-    condition_vars = {}
-    if params[:title] and params[:title] != ''
+    conditions = RDL.type_cast([], "Array<String>")
+    condition_vars = RDL.type_cast({}, "Hash<Symbol, String>")
+    if params[:title] and RDL.type_cast(params[:title], "String") != ''
       conditions.push("lower(title) like :title")
-      condition_vars[:title] ="%#{params[:title].downcase}%"
+      condition_vars[:title] ="%#{RDL.type_cast(params[:title], "String").downcase}%"
     end
     
-    if !params[:tag].blank?
+    if !RDL.type_cast(params[:tag], "String").blank?
       conditions << "tags.name = :tag_name"
-      condition_vars[:tag_name] = params[:tag]
+      condition_vars[:tag_name] = RDL.type_cast(params[:tag], "String")
     end
         
     questionnaire_scope = Questionnaire.accessible_by(current_ability).
       order(id: :desc).
       group("questionnaires.id").
-      includes(:tags, questionnaire_permissions: :person).
+      includes(:tags, questionnaire_permissions: RDL.type_cast(:person, "Symbol")).
       references(:tags)
     questionnaire_scope = questionnaire_scope.where(conditions.join(" and "), condition_vars) if conditions.any?
-    @questionnaires = questionnaire_scope.paginate(page: params[:page] || 1, per_page: per_page)
+    @questionnaires = questionnaire_scope.paginate(page: RDL.type_cast(params[:page], "Integer") || 1, per_page: per_page)
     
     @rss_url = questionnaires_url(:format => "rss")
 
@@ -50,9 +50,9 @@ class QuestionnairesController < ApplicationController
   # GET /questionnaires/1
   # GET /questionnaires/1.xml
   def show
-    @questionnaire = Questionnaire.find(params[:id])
+    @questionnaire = Questionnaire.find(RDL.type_cast(params[:id], "Integer"))
     authorize! :view_edit_pages, @questionnaire
-    attributes = params[:attributes] || @questionnaire.attribute_names
+    attributes = RDL.type_cast(params[:attributes] || @questionnaire.attribute_names, "Array<String>")
     attributes.delete "rss_secret"
 
     respond_to do |format|

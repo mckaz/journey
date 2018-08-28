@@ -11,10 +11,10 @@ class ResponsesCsvExporter
       valid_response_ids = db[:answers].select(:response_id).inner_join(:responses, :id => :response_id).where(:questionnaire_id => questionnaire.id)
 
       response_metadata = db[:responses].order(:id).where(:id => valid_response_ids).select(:id, :submitted_at, :notes).all
-      response_ids = response_metadata.map { |resp| resp[:id] }
+      response_ids = response_metadata.map { |resp| RDL.type_cast(resp, "Hash<Symbol, Object>")[:id] }
       yield ["id"] + response_ids
-      yield ["Submitted"] + response_metadata.map { |resp| resp[:submitted_at] }
-      yield ["Notes"] + response_metadata.map { |resp| resp[:notes] }
+      yield ["Submitted"] + response_metadata.map { |resp| RDL.type_cast(resp, "Hash<Symbol, Object>")[:submitted_at] }
+      yield ["Notes"] + response_metadata.map { |resp| RDL.type_cast(resp, "Hash<Symbol, Object>")[:notes] }
 
       ds = answers_table.order(Sequel.qualify(:pages, :position), Sequel.qualify(:questions, :position), Sequel.qualify(:responses, :id)).
         select(Sequel.qualify(:answers, :question_id), Sequel.qualify(:questions, :caption), Sequel.qualify(:answers, :response_id), Sequel.qualify(:answers, :value), Sequel.qualify(:question_options, :output_value))
@@ -23,7 +23,7 @@ class ResponsesCsvExporter
       current_question_id = 0
       current_row = nil
       ds.each do |db_row|
-        if db_row[:question_id] != current_question_id
+        if RDL.type_cast(db_row[:question_id], "Object") != current_question_id
           yield current_row if current_row
           current_row = [db_row[:caption]]
           current_response_index = 0
@@ -31,7 +31,7 @@ class ResponsesCsvExporter
         end
 
         current_response_id = response_ids[current_response_index]
-        if current_response_id != db_row[:response_id]
+        if RDL.type_cast(current_response_id, "Integer") != db_row[:response_id]
           skip_to = response_ids.find_index(db_row[:response_id])
           if skip_to
             (skip_to - current_response_index).times { current_row << "" }
@@ -41,7 +41,7 @@ class ResponsesCsvExporter
           end
         end
 
-        db_row[:output_value] = nil if db_row[:output_value].blank?
+        db_row[:output_value] = nil if RDL.type_cast(db_row[:output_value], "Object").blank?
         current_row << (db_row[:output_value] || db_row[:value] || "")
         current_response_index += 1
       end
@@ -56,20 +56,20 @@ class ResponsesCsvExporter
       ds = answers_table.order(Sequel.desc(Sequel.qualify(:responses, :id)), Sequel.qualify(:pages, :position), Sequel.qualify(:questions, :position)).
         select(Sequel.qualify(:responses, :id), Sequel.qualify(:responses, :submitted_at), Sequel.qualify(:responses, :notes), Sequel.qualify(:answers, :question_id), Sequel.qualify(:answers, :value), Sequel.qualify(:question_options, :output_value))
 
-      column_ids = RDL.type_cast(columns.map(&:id), "Array<Integer>", force: true) ## MKCHANGE
+      column_ids = RDL.type_cast(columns.map { |c| c.id }, "Array<Integer>", force: true) ## MKCHANGE
       current_column_index = 0
       current_response_id = 0
       current_row = nil
 
       ds.each do |db_row|
-        if db_row[:id] != current_response_id
+        if RDL.type_cast(db_row[:id], "Integer") != current_response_id
           yield current_row if current_row
           current_row = [db_row[:id], db_row[:submitted_at], db_row[:notes]]
           current_column_index = 0
           current_response_id = db_row[:id]
         end
 
-        current_column_id = column_ids[current_column_index]
+        current_column_id = RDL.type_cast(column_ids[current_column_index], "Integer")
         if current_column_id != db_row[:question_id]
           skip_to = column_ids.find_index(db_row[:question_id])
           if skip_to
@@ -80,7 +80,7 @@ class ResponsesCsvExporter
           end
         end
 
-        db_row[:output_value] = nil if db_row[:output_value].blank?
+        db_row[:output_value] = nil if RDL.type_cast(db_row[:output_value], "Object").blank?
         current_row << (db_row[:output_value] || db_row[:value] || "")
         current_column_index += 1
       end

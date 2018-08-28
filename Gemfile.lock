@@ -7,7 +7,7 @@ GIT
       rails (~> 4.0)
 
 PATH
-  remote: ../comp-types/rdl
+  remote: ../../public-rdl/rdl
   specs:
     rdl (2.1.0)
       parser (~> 2.3, >= 2.3.1.4)
@@ -192,7 +192,7 @@ GEM
       mini_portile2 (~> 2.3.0)
     orm_adapter (0.5.0)
     paginator (1.2.0)
-    parser (2.5.1.0)
+    parser (2.5.1.2)
       ast (~> 2.4.0)
     pry (0.10.1)
       coderay (~> 1.1.0)

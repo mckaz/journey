@@ -9,7 +9,7 @@ class GraphsController < ApplicationController
     authorize! :view_answers, @questionnaire
 
     @questions = Question.where(id: params[:question_ids]).all
-    @counts = aggregate_questions(params[:question_ids])
+    @counts = aggregate_questions(RDL.type_cast(params[:question_ids], "Array<Integer>"))
     @min = @questions.collect { |q| q.min }.min
     @max = @questions.collect { |q| q.max }.max
     
@@ -42,8 +42,8 @@ class GraphsController < ApplicationController
   def pie
     authorize! :view_answers, @questionnaire
     
-    @answercounts = aggregate_questions(params[:question_id]).values.first
-    @question = Question.find(params[:question_id])
+    @answercounts = aggregate_questions(RDL.type_cast(params[:question_id], "Integer")).values.first
+    @question = Question.find(RDL.type_cast(params[:question_id], "Integer"))
     
     @graph = Gruff::Pie.new(@geom)
   
@@ -77,9 +77,9 @@ class GraphsController < ApplicationController
     
     counts = RDL.type_cast({}, "Hash<Integer, Hash<String, Integer>>", force: true) ## MKCHANGE
     ds.each do |db_row|
-      question_id = db_row[:id]
-      value = (db_row[:output_value] || db_row[:value])
-      if value.blank?
+      question_id = RDL.type_cast(db_row[:id], "Integer")
+      value = RDL.type_cast((db_row[:output_value] || db_row[:value]), "String")
+      if RDL.type_cast(value, "Object").blank?
         if skip_no_answer
           next
         else
@@ -94,9 +94,9 @@ class GraphsController < ApplicationController
     
     unless skip_no_answer
       Question.where(id: question_ids).find_each do |question|
-        no_answer = @questionnaire.responses.valid.no_answer_for(question).count()
+        no_answer = @questionnaire.responses.valid.no_answer_for(RDL.type_cast(question, "Question")).count()
         if no_answer > 0
-          counts[question.id]["No answer"] = no_answer
+          counts[RDL.type_cast(question, "Question").id]["No answer"] = no_answer
         end
       end
     end

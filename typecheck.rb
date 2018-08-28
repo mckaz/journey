@@ -218,17 +218,6 @@ RDL.type ResponsesCsvExporter, :answers_table, "() -> Table<{ id: Integer, respo
 RDL.type ResponsesCsvExporter, :each_row, "() {(%any) -> %any } -> %any", wrap: false, typecheck: :later
 RDL.type GraphsController, :aggregate_questions, "(Array<Integer> or Integer) -> Hash<Integer, Hash<String, Integer>>", wrap: false, typecheck: :later
 RDL.type CanCan::ModelAdditions::ClassMethods, :accessible_by, "(Ability) -> self", wrap: false
-###-----------ActiveRecord Methods---------------------###
-puts "METHOD: #{AnswerController.instance_method(:flash)}"
-=begin
-p = Page.new
-qs = [Question.new, Question.new]
-p.questions = qs
-r = Response.new
-x = r.verify_answers_for_page(p)
-puts "WE GOT #{x}"
-=end
-
 RDL.type GraphsController, :line, "() -> Array<String>", wrap: false, typecheck: :later
 RDL.type GraphsController, :pie, "() -> Array<String>", wrap: false, typecheck: :later
 RDL.type RootController, :get_new_questionnaires, "() -> ActiveRecord_Relation<Questionnaire>", wrap: false, typecheck: :later
