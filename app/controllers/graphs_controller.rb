@@ -90,6 +90,7 @@ class GraphsController < ApplicationController
       counts[question_id] ||= RDL.type_cast({}, "Hash<String, Integer>", force: true) ## MKCHANGE
       counts[question_id][value] ||= 0
       counts[question_id][value] += 1
+
     end
     
     unless skip_no_answer

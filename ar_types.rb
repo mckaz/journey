@@ -2,6 +2,9 @@ NESTED_JOINS = false
 
 class ActiveRecord::Base
   extend RDL::Annotate
+
+  type Object, :try, "(Symbol) -> Object", wrap: false
+  type Object, :present?, "() -> %bool", wrap: false
   
   type :initialize, '(``DBType.rec_to_schema_type(trec, true)``) -> self', wrap: false
   type 'self.create', '(``DBType.rec_to_schema_type(trec, true)``) -> ``DBType.rec_to_nominal(trec)``', wrap: false
@@ -260,7 +263,7 @@ class ActiveRecord_Relation
   type :all, '() -> self', wrap: false ### kind of a silly method, always just returns self
   type :collect, "() { (t) -> u } -> Array<u>", wrap: false
   type :find_each, "() { (t) -> x } -> nil", wrap: false
-  type :to_a, "() -> Array<t>", wrap: false
+  type :to_a, "() -> ``DBType.rec_to_array(trec)``", wrap: false
   type :[], "(Integer) -> t", wrap: false
   type :size, "() -> Integer", wrap: false
 end
@@ -606,7 +609,7 @@ class DBType
           typs << RDL::Type::SingletonType.new(k)
         end
       }
-      return RDL::Type::UnionType.new(*typs)    
+      return RDL::Type::OptionalType.new(RDL::Type::UnionType.new(*typs))
     end
 
 end

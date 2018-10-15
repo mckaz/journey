@@ -56,7 +56,7 @@ class ResponsesCsvExporter
       ds = answers_table.order(Sequel.desc(Sequel.qualify(:responses, :id)), Sequel.qualify(:pages, :position), Sequel.qualify(:questions, :position)).
         select(Sequel.qualify(:responses, :id), Sequel.qualify(:responses, :submitted_at), Sequel.qualify(:responses, :notes), Sequel.qualify(:answers, :question_id), Sequel.qualify(:answers, :value), Sequel.qualify(:question_options, :output_value))
 
-      column_ids = RDL.type_cast(columns.map(&:id), "Array<Integer>", force: true) ## MKCHANGE
+      column_ids = RDL.type_cast(columns.map { |c| c.id }, "Array<Integer>", force: true) ## MKCHANGE
       current_column_index = 0
       current_response_id = 0
       current_row = nil

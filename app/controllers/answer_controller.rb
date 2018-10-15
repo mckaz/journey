@@ -196,7 +196,7 @@ class AnswerController < ApplicationController
 
         @questionnaire.email_notifications.notify_on_response_submit.includes(:person).each do |notification|
           next unless RDL.type_cast(notification.try(:person).try(:email).present?, "%bool", force: true) ##MKCHANGE
-          NotificationMailer.response_submitted(@resp, RDL.type_cast(notification.person, "Person", force: true)).deliver_later
+          NotificationMailer.response_submitted(@resp, RDL.type_cast(notification, "EmailNotification").person).deliver_later
         end
 
         redirect_to :action => "save_session", :id => @resp.questionnaire.id, :current_page => 1
