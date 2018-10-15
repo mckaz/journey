@@ -27,6 +27,13 @@ DatabaseCleaner.strategy = :truncation
 require "minitest/reporters"
 Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new
 
+class Minitest::Test
+  if ENV["TYPECHECK"]
+    # do_typecheck(...)
+    puts "Run typechecker here"
+  end
+end
+
 # TODO: JIPE can be kind of slow.  Increasing the wait time to work around it.
 Capybara.default_max_wait_time = 5
 
