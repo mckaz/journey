@@ -92,7 +92,7 @@ module ActiveRecord::Core::ClassMethods
   extend RDL::Annotate
   ## Types from this module are used when receiver is ActiveRecord::Base
 
-  type :find, '(Integer) -> ``DBType.find_output_type(trec, targs)``', wrap: false
+  type :find, '(Integer or String) -> ``DBType.find_output_type(trec, targs)``', wrap: false
   type :find, '(Array<Integer>) -> ``DBType.find_output_type(trec, targs)``', wrap: false
   type :find, '(Integer, Integer, *Integer) -> ``DBType.find_output_type(trec, targs)``', wrap: false
   type :find_by, '(``DBType.rec_to_schema_type(trec, true)``) -> ``DBType.rec_to_nominal(trec)``', wrap: false
@@ -104,7 +104,7 @@ module ActiveRecord::FinderMethods
   extend RDL::Annotate
   ## Types from this module are used when receiver is ActiveRecord_Relation
   
-  type :find, '(Integer) -> ``DBType.find_output_type(trec, targs)``', wrap: false
+  type :find, '(Integer or String) -> ``DBType.find_output_type(trec, targs)``', wrap: false
   type :find, '(Array<Integer>) -> ``DBType.find_output_type(trec, targs)``', wrap: false
   type :find, '(Integer, Integer, *Integer) -> ``DBType.find_output_type(trec, targs)``', wrap: false
   type :find_by, '(``DBType.rec_to_schema_type(trec, true)``) -> ``DBType.rec_to_nominal(trec)``', wrap: false
@@ -293,6 +293,8 @@ class DBType
       else
         raise RDL::Typecheck::StaticTypeError, "got unexpected type #{t.params[0]}"
       end
+    else
+      raise "GOT HERE WITH TYPE #{t}"
     end
   end
 
@@ -424,7 +426,7 @@ class DBType
       raise RDL::Typecheck::StaticTypeError, "No arguments given to ActiveRecord::Base#find."
     when 1
       case targs[0]
-      when RDL::Globals.types[:integer]
+      when RDL::Globals.types[:integer], RDL::Globals.types[:string]
         DBType.rec_to_nominal(trec)
       when RDL::Type::SingletonType
       # expecting symbol or integer here

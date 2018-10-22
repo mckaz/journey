@@ -177,7 +177,7 @@ RDL.type IllyanClient::Person, :save,  "() -> %any", wrap: false
 RDL.type IllyanClient::Person, :attributes,  "() -> Hash<String, String>", wrap: false
 RDL.var_type :$!, "String"
 RDL.type ActiveModel::Errors, :add, "(Symbol or String, Symbol or String) -> %any", wrap: false
-RDL.type QuestionnairesController, :params, "() -> { title: String, tag: String, page: Integer, id: Integer, attributes: Array<String> }", wrap: false
+RDL.type QuestionnairesController, :params, "() -> { title: String, tag: String, page: Integer, id: String, attributes: Array<String> }", wrap: false
 RDL.type ApplicationController, :current_ability, "() -> Ability", wrap: false
 RDL.type ActiveRecord_Relation, :paginate, "({ page: Integer, per_page: Integer }) -> self", wrap: false
 RDL.var_type QuestionnairesController, :@questionnaires, "ActiveRecord_Relation<JoinTable<Questionnaire, QuestionnairePermission or Person or Tag>>"
@@ -192,7 +192,7 @@ RDL.type ActiveRecord::Base, :can?, "(Symbol, ActiveRecord::Base) -> %bool", wra
 RDL.type ActionController::RackDelegation, :headers, "() -> Hash<String, String>", wrap: false
 RDL.type Questionnaire, :to_xml, "() -> Builder::XmlMarkup", wrap: false
 RDL.type :'ActionController::Instrumentation', :render, '(?String or Symbol, {content_type: ?String, layout: ?%bool or String, action: ?String or Symbol, location: ?String, nothing: ?%bool, text: ?[to_s: () -> String], status: ?Symbol, content_type: ?String, formats: ?Symbol or Array<Symbol>, locals: ?Hash<Symbol, %any>, xml: ?Builder::XmlMarkup, json: ?String, id: ?Integer, page: ?Integer }) -> Array<String>'
-RDL.type AnswerController, :params, "() -> { id: Integer, question: Hash<String, String>, current_page: Integer, commit: String, page: Integer }", wrap: false
+RDL.type AnswerController, :params, "() -> { id: String, question: Hash<String, String>, current_page: Integer, commit: String, page: Integer }", wrap: false
 RDL.var_type AnswerController, :@questionnaire, "Questionnaire"
 RDL.var_type AnswerController, :@resp, "Response"
 RDL.var_type AnswerController, :@page, "Page"
@@ -210,6 +210,8 @@ RDL.type ActionMailer::MessageDelivery, :deliver_later, "() -> %any", wrap: fals
 RDL.type ActionController::Base, :flash, "() -> Hash<Symbol, String or Array<String>>", wrap: false
 RDL.var_type ResponsesController, :@questionnaire, "Questionnaire"
 RDL.var_type ResponsesController, :@email_notification, "EmailNotification"
+RDL.type CanCan::ModelAdditions::ClassMethods, :accessible_by, "(Ability) -> self", wrap: false
+
 
 ### TYPE CHECKED METHODS
 ### Note: there is a bit of a mix between Sequel and ActiveRecord. The classifications below broadly speak to what category the methods mostly fall under.
@@ -217,7 +219,6 @@ RDL.var_type ResponsesController, :@email_notification, "EmailNotification"
 RDL.type ResponsesCsvExporter, :answers_table, "() -> Table<{ id: Integer, response_id: Integer, question_id: Integer, value: String, created_at: Time or DateTime, updated_at: Time or DateTime, questionnaire_id: Integer, saved_page: Integer, submitted: false or true, person_id: Integer, submitted_at: Time or DateTime, notes: String, type: String, position: Integer, caption: String, required: false or true, min: Integer, max: Integer, step: Integer, page_id: Integer, default_answer: String, layout: String, radio_layout: String, title: String, option: String, output_value: String, __all_joined: :questions or :pages or :responses or :answers or :question_options, __last_joined: :question_options, __selected: nil, __orm: false }>", wrap: false, typecheck: :later
 RDL.type ResponsesCsvExporter, :each_row, "() {(%any) -> %any } -> %any", wrap: false, typecheck: :later
 RDL.type GraphsController, :aggregate_questions, "(Array<Integer> or Integer) -> Hash<Integer, Hash<String, Integer>>", wrap: false, typecheck: :later
-RDL.type CanCan::ModelAdditions::ClassMethods, :accessible_by, "(Ability) -> self", wrap: false
 RDL.type GraphsController, :line, "() -> Array<String>", wrap: false, typecheck: :later
 RDL.type GraphsController, :pie, "() -> Array<String>", wrap: false, typecheck: :later
 RDL.type RootController, :get_new_questionnaires, "() -> ActiveRecord_Relation<Questionnaire>", wrap: false, typecheck: :later

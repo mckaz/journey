@@ -29,7 +29,7 @@ Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new
 
 class Minitest::Test
   if ENV["TYPECHECK"]
-    # do_typecheck(...)
+    require_relative '../typecheck.rb'
     puts "Run typechecker here"
   end
 end
