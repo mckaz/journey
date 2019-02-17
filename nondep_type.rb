@@ -30,6 +30,7 @@ class ActiveRecord_Relation
   type :where, "(String, Hash<Symbol, String>) -> self", wrap: false
   type :where, "(Hash<Symbol, x>) -> self", wrap: false
   type :find, "(Integer) -> t", wrap: false
+  type :find_by, "(Hash<Symbol, x>) -> t", wrap: false
   type :size, "() -> Integer", wrap: false
   type :build, "(?Hash<Symbol, x>) -> t", wrap: false
 end
@@ -44,6 +45,7 @@ class ActiveRecord::Base
   type :initialize, "(Hash<Symbol, x>) -> self", wrap: false
   type :initialize, "() -> self", wrap: false
   type :save, '() -> %bool', wrap: false
+  type :save!, '() -> %bool', wrap: false
   type :destroy, '() -> self', wrap: false
   type :reload, "() -> %any", wrap: false
   type 'self.includes', "(*Symbol) -> ActiveRecord_Relation", wrap: false
@@ -220,35 +222,29 @@ RDL.var_type ResponsesController, :@email_notification, "EmailNotification"
 
 ### type checked methods
 
-RDL.type ResponsesCsvExporter, :answers_table, "() -> Table", wrap: false, typecheck: :later # 1
-RDL.type ResponsesCsvExporter, :each_row, "() {(%any) -> %any } -> %any", wrap: false, typecheck: :later # 10
-RDL.type GraphsController, :aggregate_questions, "(Array<Integer> or Integer) -> Hash<Integer, Hash<String, Integer>>", wrap: false, typecheck: :later # 7
-RDL.type GraphsController, :line, "() -> Array<String>", wrap: false, typecheck: :later # 4
-RDL.type GraphsController, :pie, "() -> Array<String>", wrap: false, typecheck: :later # 2
-RDL.type RootController, :get_new_questionnaires, "() -> ActiveRecord_Relation<Questionnaire>", wrap: false, typecheck: :later # 0
-RDL.type RootController, :dashboard, "() -> %any", wrap: false, typecheck: :later # 2
-RDL.type Answer, 'self.find_answer', "(Response, Question) -> Answer", wrap: false, typecheck: :later # 0
-RDL.type QuestionnairePermission, :email=, "(String) -> %any", wrap: false, typecheck: :later # 1
-## Bug below???
-#RDL.type Response, :verify_answers_for_page, "(Page) -> Float", wrap: false, typecheck: :later
-RDL.type Response, :answer_for_question, "(Question) -> Answer", wrap: false, typecheck: :later # 0
-RDL.type QuestionnairesController, :index, "() -> Array<String> or String", wrap: false, typecheck: :later # 8
-RDL.type QuestionnairesController, :show, "() -> Array<String> or String", wrap: false, typecheck: :later # 2
-RDL.type AnswerController, :get_questionnaire, "() -> Questionnaire", wrap: false, typecheck: :later # 1
-RDL.type AnswerController, :save_answers, "() -> String", wrap: false, typecheck: :later # 9
-RDL.type AnswerController, :preview, "() -> Array<String>", wrap: false, typecheck: :later # 3
-RDL.type AnswerController, :questionnaire_closed, "() -> Questionnaire", wrap: false, typecheck: :later # 1
-RDL.type AnswerController, :prompt, "() -> Array<Response>", wrap: false, typecheck: :later # 2
-## BUG below??
-#RDL.type AnswerController, :index, "() -> Float", wrap: false, typecheck: :later
-RDL.type AnswerController, :resume, "() -> String", wrap: false, typecheck: :later # 2
-RDL.type ResponsesController, :get_email_notification, "() -> EmailNotification", wrap: false, typecheck: :later # 0
-
-
-# 13 in the original
-
-# 55
+RDL.type ResponsesCsvExporter, :answers_table, "() -> Table", wrap: false, typecheck: :later 
+RDL.type ResponsesCsvExporter, :each_row, "() {(%any) -> %any } -> %any", wrap: false, typecheck: :later 
+RDL.type GraphsController, :aggregate_questions, "(Array<Integer> or Integer) -> Hash<Integer, Hash<String, Integer>>", wrap: false, typecheck: :later 
+RDL.type GraphsController, :line, "() -> Array<String>", wrap: false, typecheck: :later
+RDL.type GraphsController, :pie, "() -> Array<String>", wrap: false, typecheck: :later 
+RDL.type RootController, :get_new_questionnaires, "() -> ActiveRecord_Relation<Questionnaire>", wrap: false, typecheck: :later 
+RDL.type RootController, :dashboard, "() -> %any", wrap: false, typecheck: :later 
+RDL.type Answer, 'self.find_answer', "(Response, Question) -> Answer", wrap: false, typecheck: :later 
+RDL.type QuestionnairePermission, :email=, "(String) -> %any", wrap: false, typecheck: :later
+RDL.type Response, :verify_answers_for_page, "(Page) -> Array<Question>", wrap: false, typecheck: :later
+RDL.type Response, :answer_for_question, "(Question) -> Answer", wrap: false, typecheck: :later 
+RDL.type QuestionnairesController, :index, "() -> Array<String> or String", wrap: false, typecheck: :later
+RDL.type QuestionnairesController, :show, "() -> Array<String> or String", wrap: false, typecheck: :later 
+RDL.type AnswerController, :get_questionnaire, "() -> Questionnaire", wrap: false, typecheck: :later
+RDL.type AnswerController, :save_answers, "() -> String", wrap: false, typecheck: :later 
+RDL.type AnswerController, :preview, "() -> Array<String>", wrap: false, typecheck: :later 
+RDL.type AnswerController, :questionnaire_closed, "() -> Questionnaire", wrap: false, typecheck: :later
+RDL.type AnswerController, :prompt, "() -> Array<Response>", wrap: false, typecheck: :later
+RDL.type AnswerController, :index, "() -> %any", wrap: false, typecheck: :later
+RDL.type AnswerController, :resume, "() -> String", wrap: false, typecheck: :later
+RDL.type ResponsesController, :get_email_notification, "() -> EmailNotification", wrap: false, typecheck: :later 
 
 
 
+RDL::Config.instance.use_dep_types = false
 RDL.do_typecheck :later

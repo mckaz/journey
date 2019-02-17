@@ -1,7 +1,8 @@
 source "http://rubygems.org"
 #ruby "2.1.2"
 
-gem 'rdl', path: "~/Documents/works/public-rdl/rdl/"#path: "~/Documents/works/comp-types/rdl/"
+#gem 'rdl', path: "~/Documents/works/public-rdl/rdl/"#path: "~/Documents/works/comp-types/rdl/"
+gem 'rdl', path: "~/Documents/works/pldi-rdl/rdl/"
 gem 'bundler'
 gem "rails", "= 4.2.9"
 gem 'paginator'

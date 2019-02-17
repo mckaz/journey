@@ -60,9 +60,9 @@ class AnswerController < ApplicationController
   end
 
   def index
-    @questionnaire = Questionnaire.includes(:pages).find(params[:id])
+    @questionnaire = RDL.type_cast(Questionnaire.includes(:pages).find(RDL.type_cast(params[:id], "Integer")), "Questionnaire")
     if not @questionnaire.is_open
-      redirect_to :action => 'questionnaire_closed', :id => params[:id]
+      redirect_to :action => 'questionnaire_closed', :id => RDL.type_cast(params[:id], "Integer")
     else
       response_key = "response_#{@questionnaire.id}"
       if not session[response_key]
