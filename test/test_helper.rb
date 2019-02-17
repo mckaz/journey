@@ -32,6 +32,12 @@ class Minitest::Test
     require_relative '../typecheck.rb'
     puts "Run typechecker here"
   end
+  if ENV["NODYNCHECK"]
+    RDL::Config.instance.check_comp_types = false
+    require_relative '../typecheck.rb'
+    puts "Run typechecker here"
+  end
+
 end
 
 # TODO: JIPE can be kind of slow.  Increasing the wait time to work around it.

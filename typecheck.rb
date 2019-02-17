@@ -1,5 +1,7 @@
-require_relative 'db_types.rb'
-require_relative 'ar_types.rb'
+#require_relative 'db_types.rb'
+#require_relative 'ar_types.rb'
+require_relative '../db-types/sequel/db_types.rb'
+require_relative '../db-types/active-record/db_types.rb'
 
 RDL.nowrap ActiveRecord::Associations::ClassMethods
 
@@ -192,7 +194,7 @@ RDL.type ActiveRecord::Base, :can?, "(Symbol, ActiveRecord::Base) -> %bool", wra
 RDL.type ActionController::RackDelegation, :headers, "() -> Hash<String, String>", wrap: false
 RDL.type Questionnaire, :to_xml, "() -> Builder::XmlMarkup", wrap: false
 RDL.type :'ActionController::Instrumentation', :render, '(?String or Symbol, {content_type: ?String, layout: ?%bool or String, action: ?String or Symbol, location: ?String, nothing: ?%bool, text: ?[to_s: () -> String], status: ?Symbol, content_type: ?String, formats: ?Symbol or Array<Symbol>, locals: ?Hash<Symbol, %any>, xml: ?Builder::XmlMarkup, json: ?String, id: ?Integer, page: ?Integer }) -> Array<String>'
-RDL.type AnswerController, :params, "() -> { id: String, question: Hash<String, String>, current_page: Integer, commit: String, page: Integer }", wrap: false
+RDL.type AnswerController, :params, "() -> { id: Integer, question: Hash<String, String>, current_page: Integer, commit: String, page: Integer }", wrap: false
 RDL.var_type AnswerController, :@questionnaire, "Questionnaire"
 RDL.var_type AnswerController, :@resp, "Response"
 RDL.var_type AnswerController, :@page, "Page"
@@ -226,7 +228,7 @@ RDL.type RootController, :dashboard, "() -> %any", wrap: false, typecheck: :late
 RDL.type Answer, 'self.find_answer', "(Response, Question) -> Answer", wrap: false, typecheck: :later
 RDL.type QuestionnairePermission, :email=, "(String) -> %any", wrap: false, typecheck: :later
 ## Bug below???
-#RDL.type Response, :verify_answers_for_page, "(Page) -> Float", wrap: false, typecheck: :later
+RDL.type Response, :verify_answers_for_page, "(Page) -> %any", wrap: false, typecheck: :later
 RDL.type Response, :answer_for_question, "(Question) -> Answer", wrap: false, typecheck: :later
 RDL.type QuestionnairesController, :index, "() -> Array<String> or String", wrap: false, typecheck: :later
 RDL.type QuestionnairesController, :show, "() -> Array<String> or String", wrap: false, typecheck: :later
@@ -236,7 +238,7 @@ RDL.type AnswerController, :preview, "() -> Array<String>", wrap: false, typeche
 RDL.type AnswerController, :questionnaire_closed, "() -> Questionnaire", wrap: false, typecheck: :later
 RDL.type AnswerController, :prompt, "() -> Array<Response>", wrap: false, typecheck: :later
 ## BUG below??
-#RDL.type AnswerController, :index, "() -> Float", wrap: false, typecheck: :later
+RDL.type AnswerController, :index, "() -> %any", wrap: false, typecheck: :later
 RDL.type AnswerController, :resume, "() -> String", wrap: false, typecheck: :later
 RDL.type ResponsesController, :get_email_notification, "() -> EmailNotification", wrap: false, typecheck: :later
 
