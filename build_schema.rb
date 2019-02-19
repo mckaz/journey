@@ -4,6 +4,7 @@ puts "Building schema model for Journey..."
 RDL.nowrap ActiveRecord::Associations::ClassMethods
 
 RDL.config { |config|
+
   ## config setting for RDL Union types
   config.promote_widen = true
 }

@@ -4,7 +4,11 @@ require_relative '../db-types/active-record/db_types.rb'
 #require_relative '../db_type_check/ar_types.rb'
 
 ## file required below builds the schema model used during type checking
-require_relative './build_schema.rb'
+  require_relative './build_schema.rb'
+
+
+
+puts "Type checking methods from Journey..."
 
 
 ### Annotations for type checked methods.
