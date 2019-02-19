@@ -30,12 +30,10 @@ Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new
 class Minitest::Test
   if ENV["TYPECHECK"]
     require_relative '../typecheck.rb'
-    puts "Run typechecker here"
   end
   if ENV["NODYNCHECK"]
     RDL::Config.instance.check_comp_types = false
     require_relative '../typecheck.rb'
-    puts "Run typechecker here"
   end
 
 end

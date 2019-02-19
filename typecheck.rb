@@ -121,5 +121,6 @@ RDL.type CanCan::ModelAdditions::ClassMethods, :accessible_by, "(Ability) -> sel
 
 
 ## Call to `do_typecheck` will type check all the methods above with the :later label.
-RDL.do_typecheck :later
+## The second argument is optional and is used for printing configurations.
+RDL.do_typecheck :later, (ENV["NODYNCHECK"] || ENV["TYPECHECK"])
 
