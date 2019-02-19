@@ -4,6 +4,6 @@ if ENV['ILLYAN_URL'] && ENV['ILLYAN_TOKEN']
     client.token = ENV['ILLYAN_TOKEN']
   end
 else
-  puts "WARNING: Illyan client is not configured.  Inviting new users will not work.  "+
-       "To configure the Illyan client, set the ILLYAN_URL and ILLYAN_TOKEN environment variables."
+  #puts "WARNING: Illyan client is not configured.  Inviting new users will not work.  "+
+  #     "To configure the Illyan client, set the ILLYAN_URL and ILLYAN_TOKEN environment variables."
 end

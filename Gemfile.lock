@@ -10,6 +10,7 @@ PATH
   remote: ../../pldi-rdl/rdl
   specs:
     rdl (2.1.0)
+      colorize
       parser (~> 2.3, >= 2.3.1.4)
 
 GEM
