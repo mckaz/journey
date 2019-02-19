@@ -99,7 +99,7 @@ RDL.type ActiveRecord::Base, :can?, "(Symbol, ActiveRecord::Base) -> %bool", wra
 RDL.type ActionController::RackDelegation, :headers, "() -> Hash<String, String>", wrap: false
 RDL.type Questionnaire, :to_xml, "() -> Builder::XmlMarkup", wrap: false
 RDL.type :'ActionController::Instrumentation', :render, '(?String or Symbol, {content_type: ?String, layout: ?%bool or String, action: ?String or Symbol, location: ?String, nothing: ?%bool, text: ?[to_s: () -> String], status: ?Symbol, content_type: ?String, formats: ?Symbol or Array<Symbol>, locals: ?Hash<Symbol, %any>, xml: ?Builder::XmlMarkup, json: ?String, id: ?Integer, page: ?Integer }) -> Array<String>'
-RDL.type AnswerController, :params, "() -> { id: Integer, question: Hash<String, String>, current_page: Integer, commit: String, page: Integer }", wrap: false
+RDL.type AnswerController, :params, "() -> { id: String, question: Hash<String, String>, current_page: Integer, commit: String, page: Integer }", wrap: false
 RDL.var_type AnswerController, :@questionnaire, "Questionnaire"
 RDL.var_type AnswerController, :@resp, "Response"
 RDL.var_type AnswerController, :@page, "Page"
