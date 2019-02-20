@@ -96,7 +96,7 @@ RDL.var_type AnswerController, :@all_responses, "Array<Response>"
 RDL.var_type AnswerController, :@responses, "Array<Response>"
 RDL.type ActionController::Metal, :session, "() -> Hash<String, Integer>", wrap: false
 RDL.type AnswerController, :answer_given, "(Integer) -> %bool", wrap: false
-RDL.type AnswerController, :params, "() -> { id: Integer, question: Hash<String, String>, current_page: Integer, commit: String, page: Integer }", wrap: false
+RDL.type AnswerController, :params, "() -> { id: String, question: Hash<String, String>, current_page: Integer, commit: String, page: Integer }", wrap: false
 RDL.type :'ActionController::Instrumentation', :redirect_to, '({id: ?Integer, controller: ?String, action: ?String, notice: ?String, alert: ?String, current_page: ?Integer, page: ?Integer }) -> String'
 RDL.type AnswerController, :validate_answers, "(Response, Page) -> Array<String>", wrap: false
 RDL.type ActiveRecord_Relation, :notify_on_response_submit, "() -> self", wrap: false
