@@ -1,17 +1,19 @@
 GIT
+  remote: https://github.com/plum-umd/rdl.git
+  revision: 54e7d8842e36c8b6799591bc1ba454eb9d60987b
+  branch: pldi-comp-types
+  specs:
+    rdl (2.1.0)
+      colorize
+      parser (~> 2.3, >= 2.3.1.4)
+
+GIT
   remote: https://github.com/rails/prototype-rails.git
   revision: 0fed929ff48c10c3b978edd3baa983a81f404dbf
   branch: 4.2
   specs:
     prototype-rails (4.0.0)
       rails (~> 4.0)
-
-PATH
-  remote: ../pldi-rdl/rdl
-  specs:
-    rdl (2.1.0)
-      colorize
-      parser (~> 2.3, >= 2.3.1.4)
 
 GEM
   remote: http://rubygems.org/
@@ -193,7 +195,7 @@ GEM
       mini_portile2 (~> 2.3.0)
     orm_adapter (0.5.0)
     paginator (1.2.0)
-    parser (2.5.1.2)
+    parser (2.6.0.0)
       ast (~> 2.4.0)
     pry (0.10.1)
       coderay (~> 1.1.0)

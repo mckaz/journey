@@ -1,8 +1,7 @@
 source "http://rubygems.org"
 #ruby "2.1.2"
 
-#gem 'rdl', path: "~/Documents/works/comp-types/rdl/"
-gem 'rdl', path: "~/Documents/works/pldi-rdl/rdl/"
+gem 'rdl', git: 'https://github.com/plum-umd/rdl.git', branch: 'pldi-comp-types'
 gem 'sql-parser'
 gem 'bundler'
 gem "rails", "= 4.2.9"
