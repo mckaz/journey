@@ -1,7 +1,5 @@
 require_relative '../db-types/sequel/db_types.rb'
 require_relative '../db-types/active-record/db_types.rb'
-#require_relative '../db_type_check/sequel_types.rb'
-#require_relative '../db_type_check/ar_types.rb'
 
 ## file required below builds the schema model used during type checking
   require_relative './build_schema.rb'
@@ -12,20 +10,28 @@ puts "Type checking methods from Journey..."
 
 
 ### Annotations for type checked methods.
+## Methods located in ~/journey/app/exporters/responses_csv_exporter.rb
 RDL.type ResponsesCsvExporter, :answers_table, "() -> Table<{ id: Integer, response_id: Integer, question_id: Integer, value: String, created_at: Time or DateTime, updated_at: Time or DateTime, questionnaire_id: Integer, saved_page: Integer, submitted: false or true, person_id: Integer, submitted_at: Time or DateTime, notes: String, type: String, position: Integer, caption: String, required: false or true, min: Integer, max: Integer, step: Integer, page_id: Integer, default_answer: String, layout: String, radio_layout: String, title: String, option: String, output_value: String, __all_joined: :questions or :pages or :responses or :answers or :question_options, __last_joined: :question_options, __selected: nil, __orm: false }>", wrap: false, typecheck: :later
 RDL.type ResponsesCsvExporter, :each_row, "() {(%any) -> %any } -> %any", wrap: false, typecheck: :later
+## Methods located in ~/journey/app/controllers/graphs_controller.rb
 RDL.type GraphsController, :aggregate_questions, "(Array<Integer> or Integer) -> Hash<Integer, Hash<String, Integer>>", wrap: false, typecheck: :later
 RDL.type GraphsController, :line, "() -> Array<String>", wrap: false, typecheck: :later
 RDL.type GraphsController, :pie, "() -> Array<String>", wrap: false, typecheck: :later
+## Methods located in ~/journey/app/controllers/root_controller.rb
 RDL.type RootController, :get_new_questionnaires, "() -> ActiveRecord_Relation<Questionnaire>", wrap: false, typecheck: :later
 RDL.type RootController, :dashboard, "() -> %any", wrap: false, typecheck: :later
+## Methods located in ~/journey/app/models/answer.rb
 RDL.type Answer, 'self.find_answer', "(Response, Question) -> Answer", wrap: false, typecheck: :later
+## Methods located in ~/journey/app/models/questionnaire_permission.rb
 RDL.type QuestionnairePermission, :email=, "(String) -> %any", wrap: false, typecheck: :later
+## Methods located in ~/journey/app/models/response.rb
 ## Bug found in the method below.
 RDL.type Response, :verify_answers_for_page, "(Page) -> %any", wrap: false, typecheck: :later
 RDL.type Response, :answer_for_question, "(Question) -> Answer", wrap: false, typecheck: :later
+## Methods located in ~/journey/app/controllers/questionnaires_controller.rb
 RDL.type QuestionnairesController, :index, "() -> Array<String> or String", wrap: false, typecheck: :later
 RDL.type QuestionnairesController, :show, "() -> Array<String> or String", wrap: false, typecheck: :later
+## Methods located in ~/journey/app/controllers/answer_controller.rb
 RDL.type AnswerController, :get_questionnaire, "() -> Questionnaire", wrap: false, typecheck: :later
 RDL.type AnswerController, :save_answers, "() -> String", wrap: false, typecheck: :later
 RDL.type AnswerController, :preview, "() -> Array<String>", wrap: false, typecheck: :later
@@ -34,6 +40,7 @@ RDL.type AnswerController, :prompt, "() -> Array<Response>", wrap: false, typech
 ## Bug found in the method below
 RDL.type AnswerController, :index, "() -> %any", wrap: false, typecheck: :later
 RDL.type AnswerController, :resume, "() -> String", wrap: false, typecheck: :later
+## Methods located in ~/journey/app/controllers/responses_controller.rb
 RDL.type ResponsesController, :get_email_notification, "() -> EmailNotification", wrap: false, typecheck: :later
 
 
